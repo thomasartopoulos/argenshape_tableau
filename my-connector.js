@@ -26,28 +26,38 @@
     };
 
     myConnector.getData = function(table, doneCallback) {
-        var url = "https://apis.datos.gob.ar/georef/api/provincias.geojson";
-        console.log("Fetching data from: ", url);
+        function fetchData() {
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const targetUrl = 'https://infra.datos.gob.ar/georef/provincias.geojson';
+            fetch(proxyUrl + targetUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Assuming 'data' is an array of objects, each representing a row
+                    var tableData = [];
+                    // Process each item in the data array
+                    data.features.forEach(function(feature) {
+                        tableData.push({
+                            "id": feature.properties.id,
+                            "nombre": feature.properties.nombre,
+                            "nombre_completo": feature.properties.nombre_completo,
+                            "fuente": feature.properties.fuente,
+                            "categoria": feature.properties.categoria,
+                            "centroide_lon": feature.geometry.coordinates[0],
+                            "centroide_lat": feature.geometry.coordinates[1],
+                            "iso_id": feature.properties.iso_id,
+                            "iso_nombre": feature.properties.iso_nombre,
+                            "geometry": JSON.stringify(feature.geometry)  // Convert geometry object to string
+                        });
+                    });
 
-        $.getJSON(url, function(resp) {
-            console.log("Response: ", resp);
-            // Process the response here
-            // Assuming resp is an array of objects matching the schema
-            var tableData = [];
-            for (var i = 0, len = resp.length; i < len; i++) {
-                tableData.push({
-                    "id": resp[i].id,
-                    "nombre": resp[i].nombre,
-                    // Add other fields as necessary
-                });
-            }
+                    table.appendRows(tableData);
+                    doneCallback();
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
-            table.appendRows(tableData);
-            doneCallback();
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.error("Error fetching data: ", textStatus, errorThrown);
-            tableau.abortWithError("Error fetching data.");
-        });
+        fetchData();
     };
 
     tableau.registerConnector(myConnector);
