@@ -26,7 +26,7 @@
 
     myConnector.getData = function(table, doneCallback) {
         function fetchData() {
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const proxyUrl = 'https://corsproxy.io/?';
             const targetUrl = 'https://apis.datos.gob.ar/georef/api/provincias.geojson';
             fetch(proxyUrl + targetUrl)
                 .then(response => {
@@ -39,24 +39,7 @@
                 .then(data => {
                     console.log(data); // Log the parsed JSON data
                     var tableData = [];
-                    // Assuming 'data' is an array of objects, each representing a row
-                    data.features.forEach(function(feature) {
-                        tableData.push({
-                            "id": feature.properties.id,
-                            "nombre": feature.properties.nombre,
-                            "nombre_completo": feature.properties.nombre_completo,
-                            "fuente": feature.properties.fuente,
-                            "categoria": feature.properties.categoria,
-                            "centroide_lon": feature.geometry.coordinates[0],
-                            "centroide_lat": feature.geometry.coordinates[1],
-                            "iso_id": feature.properties.iso_id,
-                            "iso_nombre": feature.properties.iso_nombre,
-                            "geometry": JSON.stringify(feature.geometry)  // Convert geometry object to string
-                        });
-                    });
-
-                    table.appendRows(tableData);
-                    doneCallback();
+                    // Further processing...
                 })
                 .catch(error => console.error('Error:', error));
         }
