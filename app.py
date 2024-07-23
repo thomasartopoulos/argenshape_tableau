@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/proxy', methods=['GET'])
 def proxy():
-    url = 'https://apis.datos.gob.ar/georef/api/provincias.geojson'
+    url = 'https://infra.datos.gob.ar/georef/provincias.geojson'
     response = requests.get(url)
     data = response.json()
 
