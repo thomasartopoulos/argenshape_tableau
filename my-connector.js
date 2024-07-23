@@ -28,7 +28,7 @@
     myConnector.getData = function(table, doneCallback) {
         function fetchData() {
             const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const targetUrl = 'https://infra.datos.gob.ar/georef/provincias.geojson';
+            const targetUrl = 'https://apis.datos.gob.ar/georef/api/provincias.geojson';
             fetch(proxyUrl + targetUrl)
                 .then(response => response.json())
                 .then(data => {
