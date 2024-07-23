@@ -26,7 +26,7 @@
     };
 
     myConnector.getData = function(table, doneCallback) {
-        var url = "https://apis.datos.gob.ar/georef/api/provincias.geojson";
+        var url = "http://localhost:8000/proxy";
         console.log("Fetching data from: ", url);
 
         $.getJSON(url, function(resp) {
