@@ -21,7 +21,6 @@
             columns: cols
         };
 
-        console.log("Schema: ", tableSchema);
         schemaCallback([tableSchema]);
     };
 
@@ -30,12 +29,17 @@
             const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
             const targetUrl = 'https://apis.datos.gob.ar/georef/api/provincias.geojson';
             fetch(proxyUrl + targetUrl)
-                .then(response => response.json())
+                .then(response => {
+                    console.log(response); // Log the raw response
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    console.log(data);
-                    // Assuming 'data' is an array of objects, each representing a row
+                    console.log(data); // Log the parsed JSON data
                     var tableData = [];
-                    // Process each item in the data array
+                    // Assuming 'data' is an array of objects, each representing a row
                     data.features.forEach(function(feature) {
                         tableData.push({
                             "id": feature.properties.id,
