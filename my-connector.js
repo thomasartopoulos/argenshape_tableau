@@ -27,7 +27,7 @@
     myConnector.getData = function(table, doneCallback) {
         function fetchData() {
             const proxyUrl = 'https://corsproxy.io/?';
-            const targetUrl = encodeURIComponent('https://apis.datos.gob.ar/georef/api/provincias');
+            const targetUrl = encodeURIComponent('https://apis.datos.gob.ar/georef/api/provincias.geojson');
 
             fetch(proxyUrl + targetUrl)
                 .then(response => {
