@@ -12,7 +12,7 @@
             {id: "centroide_lat", alias: "Latitude", dataType: tableau.dataTypeEnum.float},
             {id: "iso_id", alias: "ISO ID", dataType: tableau.dataTypeEnum.string},
             {id: "iso_nombre", alias: "ISO Name", dataType: tableau.dataTypeEnum.string},
-            {id: "geometry", alias: "Geometry", dataType: tableau.dataTypeEnum.geometry}  // Add geometry data type
+            {id: "geometry", alias: "Geometry", dataType: tableau.dataTypeEnum.string} // Changed to string for simplicity
         ];
 
         var tableSchema = {
@@ -26,8 +26,9 @@
 
     myConnector.getData = function(table, doneCallback) {
         function fetchData() {
-            const proxyUrl = ' https://test.cors.workers.dev/';
+            const proxyUrl = 'https://test.cors.workers.dev/';
             const targetUrl = 'https://apis.datos.gob.ar/georef/api/provincias.geojson';
+
             fetch(proxyUrl + targetUrl)
                 .then(response => {
                     console.log(response); // Log the raw response
@@ -38,8 +39,27 @@
                 })
                 .then(data => {
                     console.log(data); // Log the parsed JSON data
+
                     var tableData = [];
-                    // Further processing...
+                    if (data && data.provincias) { // Ensure data is available
+                        data.provincias.forEach(item => {
+                            tableData.push({
+                                "id": item.id,
+                                "nombre": item.nombre,
+                                "nombre_completo": item.nombre_completo,
+                                "fuente": item.fuente,
+                                "categoria": item.categoria,
+                                "centroide_lon": item.centroide_lon,
+                                "centroide_lat": item.centroide_lat,
+                                "iso_id": item.iso_id,
+                                "iso_nombre": item.iso_nombre,
+                                "geometry": JSON.stringify(item.geometry) // Convert geometry to string for simplicity
+                            });
+                        });
+                    }
+
+                    table.appendRows(tableData);
+                    doneCallback();
                 })
                 .catch(error => console.error('Error:', error));
         }
