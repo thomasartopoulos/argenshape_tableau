@@ -31,14 +31,14 @@
 
             fetch(proxyUrl + targetUrl)
                 .then(response => {
-                    console.log(response); // Log the raw response
+                    console.log('Raw response:', response); // Log the raw response
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data); // Log the parsed JSON data
+                    console.log('Parsed data:', data); // Log the parsed JSON data
 
                     var tableData = [];
                     if (data && data.provincias) { // Ensure data is available
@@ -58,10 +58,13 @@
                         });
                     }
 
+                    console.log('Table data:', tableData); // Log the table data
                     table.appendRows(tableData);
                     doneCallback();
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
         }
 
         fetchData();
