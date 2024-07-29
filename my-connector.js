@@ -31,29 +31,26 @@
 
             fetch(proxyUrl + targetUrl)
                 .then(response => {
-                    console.log('Raw response:', response); // Log the raw response
+                    console.log(response); // Log the raw response
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Parsed JSON data:', data); // Log the parsed JSON data
+                    console.log(data); // Log the parsed JSON data
 
                     var tableData = [];
                     if (data && data.provincias) { // Ensure data is available
                         data.provincias.forEach(item => {
-                            // Log individual item
-                            console.log('Processing item:', item);
-                            
                             tableData.push({
                                 "id": item.id,
                                 "nombre": item.nombre,
                                 "nombre_completo": item.nombre_completo,
                                 "fuente": item.fuente,
                                 "categoria": item.categoria,
-                                "centroide_lon": item.centroide.lon,
-                                "centroide_lat": item.centroide.lat,
+                                "centroide_lon": item.centroide_lon,
+                                "centroide_lat": item.centroide_lat,
                                 "iso_id": item.iso_id,
                                 "iso_nombre": item.iso_nombre,
                                 "geometry": JSON.stringify(item.geometry) // Convert geometry to string for simplicity
